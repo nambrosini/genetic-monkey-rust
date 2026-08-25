@@ -1,0 +1,63 @@
+name: Release & Deploy
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'   # matches v1.0.0, v0.2.1, etc.
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main   # so version bump can be committed back to main, not the tag's detached ref
+
+      - name: Extract version from tag
+        id: get_version
+        run: |
+          TAG=${GITHUB_REF#refs/tags/v}
+          echo "version=$TAG" >> "$GITHUB_OUTPUT"
+
+      - name: Update Cargo.toml version
+        run: |
+          sed -i "0,/^version = \".*\"/s//version = \"${{ steps.get_version.outputs.version }}\"/" Cargo.toml
+          cargo update -p $(grep '^name' Cargo.toml | head -1 | cut -d '"' -f2) --precise ${{ steps.get_version.outputs.version }} || true
+
+      - name: Commit version bump
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add Cargo.toml Cargo.lock
+          git commit -m "chore: bump version to ${{ steps.get_version.outputs.version }}" || echo "No changes to commit"
+          git push origin main
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+
+      - uses: jetli/trunk-action@v0.5.0
+        with:
+          version: 'latest'
+
+      - name: Build
+        run: trunk build --release --public-url /your-repo-name/
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build-and-deploy
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

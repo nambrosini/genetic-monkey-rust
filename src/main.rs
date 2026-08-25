@@ -121,8 +121,10 @@ impl Application {
                                     _ => button::Style::default()
                                         .with_background(palette.danger.strong.color),
                                 }
-                            }),
+                            })
+                            .padding(10),
                     )
+                    .spacing(10)
                     .padding(10),
                 )
                 .padding(10)
@@ -148,6 +150,7 @@ impl Application {
         ))
         .width(Fill)
         .height(Fill)
+        .padding(10)
         .into()
     }
 

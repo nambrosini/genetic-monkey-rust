@@ -4,5 +4,10 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-iced = { version = "0.14.0", features = ["tokio"] }
+iced = { version = "0.14.0", features = ["tokio", "wgpu", "fira-sans"] }
 rand = "0.10.2"
+
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+console_error_panic_hook = "0.1"
+wasm-bindgen = "0.2"
+getrandom = { version = "0.4", features = ["wasm_js"] }
