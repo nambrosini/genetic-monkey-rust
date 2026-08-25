@@ -1,4 +1,4 @@
-use genetic_monkey_rust::Population;
+use genetic_monkey_rust::population::Population;
 
 fn main() {
     let mut pop = Population::new("Forza Ambri!", 100, 0.01);
