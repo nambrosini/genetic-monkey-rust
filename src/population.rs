@@ -11,6 +11,7 @@ pub struct Population {
     mating_pool: Vec<usize>,
     average_fitness: f64,
     target: String,
+    generation: i64,
 }
 
 impl Population {
@@ -24,6 +25,7 @@ impl Population {
             mating_pool: vec![],
             average_fitness: 0f64,
             target: target.to_string(),
+            generation: 0,
         }
     }
 
@@ -59,6 +61,7 @@ impl Population {
         }
         self.mating_pool.clear();
         self.pop = pop;
+        self.pop.sort_by(|a, b| a.fitness().total_cmp(&b.fitness()));
     }
 
     pub fn get_average_fitness(&self) -> f64 {
@@ -82,6 +85,33 @@ impl Population {
         }
         self.mate();
         self.reproduce();
+        self.generation += 1;
         true
+    }
+
+    pub fn has_ended(&self) -> bool {
+        self.best_monkey() == self.target
+    }
+
+    pub fn generation(&self) -> i64 {
+        self.generation
+    }
+
+    pub fn pop_size(&self) -> usize {
+        self.pop_size
+    }
+
+    pub fn top_phrases(&self, num: usize) -> Vec<String> {
+        self.pop
+            .iter()
+            .take(num)
+            .map(|m| m.genes().iter().collect())
+            .collect()
+    }
+}
+
+impl Default for Population {
+    fn default() -> Self {
+        Self::new("to be or not to be", 1000, 0.01)
     }
 }
