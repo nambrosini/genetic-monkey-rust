@@ -1910,7 +1910,7 @@ function __wbg_get_imports() {
     };
     return {
         __proto__: null,
-        "./genetic-monkey-rust_bg.js": import0,
+        "./genetic-monkey_bg.js": import0,
     };
 }
 
@@ -2392,7 +2392,7 @@ async function __wbg_init(module_or_path) {
     }
 
     if (module_or_path === undefined) {
-        module_or_path = new URL('genetic-monkey-rust_bg.wasm', import.meta.url);
+        module_or_path = new URL('genetic-monkey_bg.wasm', import.meta.url);
     }
     const imports = __wbg_get_imports();
 

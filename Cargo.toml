@@ -1,5 +1,5 @@
 [package]
-name = "genetic-monkey-rust"
+name = "genetic-monkey"
 version = "0.1.1"
 edition = "2024"
 

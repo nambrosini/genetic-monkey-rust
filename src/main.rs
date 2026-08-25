@@ -1,4 +1,4 @@
-use genetic_monkey_rust::population::Population;
+use genetic_monkey::population::Population;
 use iced::{
     Element,
     Length::Fill,
