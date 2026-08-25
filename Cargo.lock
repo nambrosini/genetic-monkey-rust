@@ -983,7 +983,7 @@ dependencies = [
 
 [[package]]
 name = "genetic-monkey"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "console_error_panic_hook",
  "getrandom 0.4.3",
