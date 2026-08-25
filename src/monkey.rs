@@ -38,11 +38,7 @@ impl Monkey {
         let mut rng = rand::rng();
         let mut genes = self.genes.clone();
         let midpoint = rng.random_range(0..self.genes.len());
-        for i in 0..self.genes.len() {
-            if i > midpoint {
-                genes[i] = other.genes[i]
-            }
-        }
+        genes[midpoint + 1..].copy_from_slice(&other.genes[midpoint + 1..]);
         Monkey {
             genes,
             fitness: 0.0,
